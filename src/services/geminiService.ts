@@ -35,20 +35,28 @@ export interface AnalysisResult {
 
 export async function analyzeEvidence(files: File[], textInput: string): Promise<AnalysisResult> {
   const prompt = `
-    Actúa como un perito forense experto en Lingüística, Psicología Cognitiva y Criminalística.
-    Analiza la evidencia proporcionada (archivos y texto) para detectar manipulación, gaslighting, contradicciones y presión psicológica.
+    Actúa como un Perito Forense experto en SCAN (Scientific Content Analysis) y Psicología Cognitiva.
+    Analiza la evidencia buscando indicadores de engaño, manipulación, gaslighting y carga cognitiva.
     
-    Aplica rigurosamente la metodología de los 30 indicadores forenses.
-    Calcula el "Triángulo de Mentira Textual" (Hecho, Tiempo, Emoción) y aplica la fórmula de puntuación forense.
-    
+    CRITERIOS DE ANÁLISIS:
+    1. Distanciamiento lingüístico (uso de pronombres, pasividad).
+    2. Cambios de tiempo verbal (del pasado al presente al mentir).
+    3. Omisión de detalles críticos vs. exceso de detalles irrelevantes.
+    4. Indicadores de manipulación emocional y victimización.
+    5. Inconsistencias cronológicas y espaciales.
+
     Proporciona un resultado en formato JSON estricto con la siguiente estructura:
     {
       "credibilityScore": number (0-100),
       "riskLevel": "bajo" | "medio" | "alto" | "crítico",
-      "summary": "Resumen técnico pericial",
+      "summary": "Resumen técnico pericial detallado",
       "triangleScores": { "fact": number, "time": number, "emotion": number },
       "indicators": [{ "category": "string", "severity": number (1-5), "evidence": "string" }],
-      "heatmap": [{ "category": "string", "value": number (0-100) }]
+      "heatmap": [
+        { "category": "Veracidad", "value": number },
+        { "category": "Manipulación", "value": number },
+        { "category": "Estrés", "value": number }
+      ]
     }
   `;
 
