@@ -86,9 +86,13 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`TRUTHLENS CORE RUNNING ON PORT ${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`TRUTHLENS CORE RUNNING ON PORT ${PORT}`);
+    });
+  }
 }
 
 startServer();
+
+export default app;
