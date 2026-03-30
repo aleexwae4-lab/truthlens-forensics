@@ -54,6 +54,7 @@ export default function App() {
       setIsAnalyzing(false);
     }, 2000);
   };
+  const handleAnalyze = async () => {
     if (!input && files.length === 0) return;
     
     setLoading(true);
