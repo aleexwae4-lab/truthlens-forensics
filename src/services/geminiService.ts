@@ -14,56 +14,67 @@ const getAI = () => {
 };
 
 export interface AnalysisResult {
-  credibilityScore: number;
-  riskLevel: 'bajo' | 'medio' | 'alto' | 'crítico';
-  summary: string;
-  triangleScores: {
-    fact: number;
-    time: number;
-    emotion: number;
+  resumenEjecutivo: {
+    explicacion: string;
+    nivelRiesgo: 'Bajo' | 'Medio' | 'Alto' | 'Crítico';
+    hallazgosPrincipales: string[];
   };
-  indicators: {
-    category: string;
-    severity: number;
-    evidence: string;
+  analisisTecnico: {
+    agente: string;
+    observaciones: string;
+    evidencia: string;
+    anomalias: string;
+    correlaciones: string;
   }[];
-  heatmap: {
-    category: string;
-    value: number;
+  contradicciones: string[];
+  conclusionesProbabilisticas: {
+    nivelConfianza: 'Alta Confianza' | 'Media Confianza' | 'Baja Confianza';
+    porcentaje: number;
+    conclusion: string;
+    justificacion: string;
   }[];
+  recomendacionesEstrategicas: string[];
 }
 
 export async function analyzeEvidence(files: File[], textInput: string): Promise<AnalysisResult> {
   const prompt = `
-    Actúa como un Perito Forense experto en SCAN (Scientific Content Analysis) y Psicología Cognitiva.
-    Analiza la evidencia buscando indicadores de engaño, manipulación, gaslighting y carga cognitiva.
-    
-    CRITERIOS DE ANÁLISIS:
-    1. Distanciamiento lingüístico (uso de pronombres, pasividad).
-    2. Cambios de tiempo verbal (del pasado al presente al mentir).
-    3. Omisión de detalles críticos vs. exceso de detalles irrelevantes.
-    4. Indicadores de manipulación emocional y victimización.
-    5. Inconsistencias cronológicas y espaciales.
+    OPERA COMO UN CONSEJO CORPORATIVO DE INTELIGENCIA FORENSE compuesto por especialistas de máximo nivel.
+    Cada agente especializado (documental, lingüístico, cronológico, visual, OSINT) debe analizar profundamente la evidencia aportada, debatir internamente, validar evidencia cruzada y producir un informe extremadamente robusto, técnico, estratégico y profesional.
+    El objetivo es superar el estándar común de análisis y entregar resultados dignos de un laboratorio de inteligencia avanzada.
 
-    Proporciona un resultado en formato JSON estricto con la siguiente estructura:
+    Debes proporcionar SIEMPRE el resultado en STRICT JSON con esta estructura exacta y en lenguaje técnico/corporativo:
     {
-      "credibilityScore": number (0-100),
-      "riskLevel": "bajo" | "medio" | "alto" | "crítico",
-      "summary": "Resumen técnico pericial detallado",
-      "triangleScores": { "fact": number, "time": number, "emotion": number },
-      "indicators": [{ "category": "string", "severity": number (1-5), "evidence": "string" }],
-      "heatmap": [
-        { "category": "Veracidad", "value": number },
-        { "category": "Manipulación", "value": number },
-        { "category": "Estrés", "value": number }
-      ]
+      "resumenEjecutivo": {
+        "explicacion": "string detallado (análisis global)",
+        "nivelRiesgo": "Bajo" | "Medio" | "Alto" | "Crítico",
+        "hallazgosPrincipales": ["string", "string"]
+      },
+      "analisisTecnico": [ // Mínimo 5 agentes (Agente Documental, Agente Lingüístico, etc.)
+        {
+          "agente": "Ej. Agente Lingüístico",
+          "observaciones": "string",
+          "evidencia": "string",
+          "anomalias": "string",
+          "correlaciones": "string"
+        }
+      ],
+      "contradicciones": ["inconsistencia 1", "vacío 2", "anomalía 3"],
+      "conclusionesProbabilisticas": [
+        {
+          "nivelConfianza": "Alta Confianza" | "Media Confianza" | "Baja Confianza",
+          "porcentaje": number, // Ej: 92
+          "conclusion": "string",
+          "justificacion": "string"
+        }
+      ],
+      "recomendacionesEstrategicas": ["recomendacion 1", "recomendacion 2"]
     }
   `;
 
   const contents: any[] = [{ text: prompt }];
 
   if (textInput) {
-    contents.push({ text: `Texto adicional: ${textInput}` });
+    contents.push({ text: `EVIDENCIA A ANALIZAR (TEXTO/CONTEXTO):\n${textInput}` });
   }
 
   for (const file of files) {
