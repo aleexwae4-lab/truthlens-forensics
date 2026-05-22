@@ -29,16 +29,16 @@ app.post("/api/create-checkout-session", async (req, res) => {
       payment_method_types: ["card"],
       line_items: [
         {
-          price: process.env.STRIPE_PRICE_ID, // Configure in .env
+          price: process.env.STRIPE_PRICE_ID,
           quantity: 1,
         },
       ],
       mode: "subscription",
-      success_url: `${req.headers.origin}/?success=true`,
-      cancel_url: `${req.headers.origin}/?canceled=true`,
+      success_url: `${process.env.APP_URL || req.headers.origin}/?success=true`,
+      cancel_url: `${process.env.APP_URL || req.headers.origin}/?canceled=true`,
     });
 
-    res.json({ id: session.id });
+    res.json({ id: session.id, url: session.url });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -67,6 +67,15 @@ app.post("/api/openai-analysis", async (req, res) => {
 // Health Check
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
+// Diagnostics (Check if keys are present)
+app.get("/api/diagnostics", (req, res) => {
+  res.json({
+    gemini: !!process.env.GEMINI_API_KEY,
+    openai: !!process.env.OPENAI_API_KEY,
+    stripe: !!process.env.STRIPE_SECRET_KEY && !!process.env.STRIPE_PRICE_ID
+  });
 });
 
 // --- VITE MIDDLEWARE / STATIC SERVING ---
